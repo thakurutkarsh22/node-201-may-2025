@@ -1,14 +1,36 @@
 const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config(); // is loading all my secrets from .env file to process.env
+
+const UserActivityRouter = require("./Routes/UserActivityRoutes");
+
+const { getAllUser, getUserByGender, getUserByUserName } = require("./Controllers/UserActivityController");
 const { HomeResponse } = require("./Controllers/HomeCOntroller");
-const userData = require("./usersData");
+const AuthMiddleware = require("./Middleware/AuthMiddleware");
 
 const server = express();
-const PORT = 8089;
+const PORT = process.env.PORT;
 
+
+const MT_SECRET_PASSWORD = process.env.MT_SECRET_PASSWORD;
 
 
 // HOME ROUTE
-server.get("/", HomeResponse);
+server.get("/", (req, res, next) => {
+    const header = req.headers;
+    const authorization = header.authorization; // asdf1234
+
+    // Middleware is checking if req is good.
+    if(authorization === MT_SECRET_PASSWORD) {
+        next()
+    } else {
+        res.status(429).json({message: "please provide with correct password !!AuthMiddleware 1"})
+    }
+
+},  HomeResponse);
+
+
+
 server.get("/home", HomeResponse);
 
 server.get("/contacts", (req, res) => {
@@ -18,7 +40,7 @@ server.get("/contacts", (req, res) => {
     res.status(200).send("this is a contact page 8802746637 s");
 });
 
-server.get("/fitness", (req, res) => {
+server.get("/fitness", (req, res, next) => {
     const dietChart = {
         name: "utkarsh",
         heigh: 174,
@@ -39,47 +61,15 @@ server.get("/fitness", (req, res) => {
 
 
 
-
-// ----------- ACTIVITY --------------
-// ROUTES / API   (https://www.google.com/)
-server.get("/v1/activity/users", (req, res) => {
-    res.json(userData.data);
-})
+// use -> supports all types of REQUEST METHODS (get, post, put , delete .....  )
+server.use("/v1/activity/users",  UserActivityRouter)
 
 
-// query params (ex: https://www.google.com/search?q=virat, https://www.google.com/search?q=sachin)
-// we want to get all the FEMALE USERS
 
-server.get("/v1/activity/users/search", (req, res) => {
-    const query = req.query;
-    const searchedGender = query.gender;
-
-    const filteredData = userData.data.filter(user => user.gender === searchedGender)
-    res.json(filteredData);
-})
-
-
-// want to get only 1 user 
-// way 1: query params 
-
-// server.get("/v1/activity/users/search/user", (req, res) => {
-//     const query = req.query;
-//     const searchedFirstName = query.firstName;
-
-//     const filteredData = userData.data.filter(user => user.name.first === searchedFirstName)
-//     res.json(filteredData);
-// })
-
-
-// WAY 2: PARAMS (https://pokeapi.co/api/v2/pokemon/ditto, https://pokeapi.co/api/v2/pokemon/pikachu) -> only one part is variable
-
-server.get("/v1/activity/users/search/user/:userName", (req, res) => {
-    const params = req.params;
-    const searchedFirstName = params.userName;
-
-    const filteredData = userData.data.filter(user => user.name.first === searchedFirstName)
-    res.json(filteredData);
-})
+// - - - - - - - - INSTEAD OF USING BELOW 3 API we use THE ABOVE LINE - - - - - - - - -
+// server.get("/v1/activity/users", getAllUser)
+// server.get("/v1/activity/users/search", getUserByGender)
+// server.get("/v1/activity/users/search/user/:userName", getUserByUserName)
 
 
 server.listen(PORT, () => {
