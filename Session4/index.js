@@ -7,6 +7,7 @@ const UserActivityRouter = require("./Routes/UserActivityRoutes");
 const { getAllUser, getUserByGender, getUserByUserName } = require("./Controllers/UserActivityController");
 const { HomeResponse } = require("./Controllers/HomeCOntroller");
 const AuthMiddleware = require("./Middleware/AuthMiddleware");
+const { default: mongoose } = require("mongoose");
 
 const server = express();
 const PORT = process.env.PORT;
@@ -66,10 +67,14 @@ server.use("/v1/activity/users",  UserActivityRouter)
 
 
 
-// - - - - - - - - INSTEAD OF USING BELOW 3 API we use THE ABOVE LINE - - - - - - - - -
-// server.get("/v1/activity/users", getAllUser)
-// server.get("/v1/activity/users/search", getUserByGender)
-// server.get("/v1/activity/users/search/user/:userName", getUserByUserName)
+mongoose.connect("mongodb://localhost:27017").then(() => {
+    console.log("DATABASE IS UP")
+}, (error) => {
+    console.log("ERROR IN DATABASE CONNECTION", error)
+}
+).catch(error => {
+    console.log("ERROR IN DATABASE CONNECTION")
+})
 
 
 server.listen(PORT, () => {
