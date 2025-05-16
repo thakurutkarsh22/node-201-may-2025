@@ -8,7 +8,7 @@ const blogSchema = new Schema({
     phone: {type: String, required: true, validate: (data) => validtor.isMobilePhone(data)},
     email: {type: String, required: true , validate: (data) => validtor.isEmail(data)},
     authors: [String]
-});
+}, {timestamps: true});
 
 
 // to connect blogSchema to actual blog collection in DB 

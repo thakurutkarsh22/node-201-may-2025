@@ -13,7 +13,7 @@ class BlogService {
             content,
             title,
             email,
-            phone
+            phone,
         });
 
 
