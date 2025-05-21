@@ -4,6 +4,7 @@ dotenv.config(); // is loading all my secrets from .env file to process.env
 
 const UserActivityRouter = require("./Routes/UserActivityRoutes");
 const BlogsRouter = require("./Routes/BlogRoutes");
+const AuthRouter = require("./Routes/AuthRoutes");
 
 const { getAllUser, getUserByGender, getUserByUserName } = require("./Controllers/UserActivityController");
 const { HomeResponse } = require("./Controllers/HomeCOntroller");
@@ -68,6 +69,9 @@ server.get("/fitness", (req, res, next) => {
 
 server.use("/v1/activity/users",  UserActivityRouter)
 
+
+// routes for signup and login 
+server.use("/v1/api/auth", AuthRouter)
 
 
 
