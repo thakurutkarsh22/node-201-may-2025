@@ -8,7 +8,8 @@ async function createNewBlog(req, res) {
     if(validateUserInput(body)) {
         try {
             console.log("before createNewBlog")
-            const response = await BlogService.createBlogDTO(body);
+            const response = BlogService.createBlogDTO(body);
+            console.log("after createNewBlog", response);
             res.status(201).json(response);
         } catch (error) {
             res.status(500).json({message: error})
