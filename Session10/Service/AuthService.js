@@ -1,7 +1,8 @@
 const UserModel = require("../Models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const JWT_KEY = "asfjgfadjfglaskjfghlasjkfglaskjfghlasjfgasdljhfgadskjhfgas"
+const { JWT_KEY } = require("../Config/util");
+
 
 class AuthService{
 
@@ -25,7 +26,7 @@ class AuthService{
 
                 if(result) {
                     // it means user passwrd matches
-                    token = jwt.sign({username: userArray[0].username}, JWT_KEY, {
+                    token = jwt.sign({username: userArray[0].username, "asafsaf": "helo"}, JWT_KEY, {
                         expiresIn: "100000ms"
                     })
                 }

@@ -1,26 +1,29 @@
 const express = require("express");
 const dotenv = require("dotenv");
-dotenv.config(); // is loading all my secrets from .env file to process.env
+dotenv.config();
 
 const UserActivityRouter = require("./Routes/UserActivityRoutes");
 const BlogsRouter = require("./Routes/BlogRoutes");
 const AuthRouter = require("./Routes/AuthRoutes");
 
-const { getAllUser, getUserByGender, getUserByUserName } = require("./Controllers/UserActivityController");
-const { HomeResponse } = require("./Controllers/HomeCOntroller");
-const AuthMiddleware = require("./Middleware/AuthMiddleware");
-const { default: mongoose } = require("mongoose");
 
+const { HomeResponse } = require("./Controllers/HomeCOntroller");
+const { default: mongoose } = require("mongoose");
+const configPassport = require("./Config/passport");
+const passport = require("passport");
 const server = express();
 const PORT = process.env.PORT;
+const cors = require("cors");
+
+server.use(cors()) // this line allows all the CLients in the world to connect to my server 
+
+
+configPassport(passport); // through this line my application (backend) knows how many stratergies for login I am using 
 
 
 
-// MIDDLEWARE THAT WORK FOR EVERY REQUEST
-// any request that arrive in my server should be parsed (bec we need the body)
-// if I do not give any path like server.get("/",), it means it will work for EVERY REQUEST
-server.use(express.json()) // express.json() - Returns middleware that only parses json
-// this line is converting string BODY to Object so that node can play
+server.use(express.json())
+
 
 
 const MT_SECRET_PASSWORD = process.env.MT_SECRET_PASSWORD;

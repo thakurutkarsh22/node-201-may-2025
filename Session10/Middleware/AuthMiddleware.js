@@ -1,7 +1,8 @@
 
 const MT_SECRET_PASSWORD = "asdf1234"
 const jwt = require("jsonwebtoken");
-const JWT_KEY = "asfjgfadjfglaskjfghlasjkfglaskjfghlasjfgasdljhfgadskjhfgas"
+const { JWT_KEY } = require("../Config/util");
+
 
 function AuthMiddleware(req, res, next)  {
     const header = req.headers;

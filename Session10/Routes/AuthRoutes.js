@@ -1,11 +1,15 @@
 const express = require("express");
 const { login, singnup } = require("../Controllers/AuthController");
 const UserModel = require("../Models/UserModel");
-const AuthMiddleware = require("../Middleware/AuthMiddleware");
-
 const router = express.Router();
+const passport = require("passport");
 
-//  "v1/activity/users/"
+const AuthMiddleware = passport.authenticate("jwt", {
+    session: false
+})
+
+
+
 
 router.post("/login", login)
 router.post("/register", singnup)
