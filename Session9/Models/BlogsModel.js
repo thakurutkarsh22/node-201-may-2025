@@ -18,4 +18,3 @@ module.exports = mongoose.model("blogs", blogSchema);
 // [1,2,3,4] 5
 // $in no
 // $nin yes
-
